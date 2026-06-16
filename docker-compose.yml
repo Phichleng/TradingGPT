@@ -1,0 +1,39 @@
+services:
+  api:
+    build: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    env_file: .env
+    ports: ["8000:8000"]
+    depends_on: [db, redis, qdrant]
+    extra_hosts: ["host.docker.internal:host-gateway"]   # reach host Ollama
+
+  worker:
+    build: ./backend
+    command: celery -A app.workers.celery_app worker -l info
+    env_file: .env
+    depends_on: [db, redis]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+
+  db:
+    image: timescale/timescaledb:latest-pg16
+    environment:
+      POSTGRES_PASSWORD: tradinggpt
+      POSTGRES_DB: tradinggpt
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    ports: ["5432:5432"]
+
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+
+  qdrant:
+    image: qdrant/qdrant
+    volumes: ["qdrant:/qdrant/storage"]
+    ports: ["6333:6333"]
+
+  frontend:
+    build: ./frontend
+    ports: ["3000:3000"]
+    depends_on: [api]
+
+volumes: { pgdata: {}, qdrant: {} }

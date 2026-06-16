@@ -1,0 +1,2 @@
+{"market":"XAUUSD","strategy":"ict","direction":"long","outcome":"win","rr_realized":3.2,"setup_notes":"Swept Asian low in London KZ, bullish FVG + OB in discount, OTE entry, ran to buyside. Clean displacement."}
+{"market":"XAUUSD","strategy":"ict","direction":"long","outcome":"loss","rr_realized":-1.0,"setup_notes":"Entered OTE without a prior liquidity sweep; price was in premium against daily bias. No displacement. Stopped out."}
